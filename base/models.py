@@ -32,6 +32,12 @@ class PurchaseAndEnrolment(models.Model):
     student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
     course_id=models.ForeignKey(Course,on_delete=models.CASCADE)
     amount=models.CharField(max_length=10)
-    time=models.DateTimeField(auto_now=True)
+    time=models.DateTimeField(auto_now_add=True)
     
+class Topic(models.Model):
+    teacher_id=models.ForeignKey(Teacher,on_delete=models.CASCADE)
+    course_id=models.ForeignKey(Course,on_delete=models.CASCADE)
+    content=models.TextField()
+    updated_at=models.DateTimeField(auto_now=True)
+    published_at=models.DateTimeField(auto_now_add=True)
     
