@@ -15,5 +15,6 @@ def courses(request,pk):
     context1={'course':course}
     
     context2={'teacher':teacher}
+    context = {**context1, **context2}
    
-    return render(request,'base/courses.html',context1,context2)
+    return render(request,'base/courses.html',context)
