@@ -5,11 +5,23 @@
 <h1>Home page template</h1>
 <div>
     <div>
-        /courses/{{course.id}}
-        {% for course in courses %}
-            <div>
-                <h4>{{course.id}} -- <a href="/courses/{{course.id}}">{{course.name}}</a></h4>
-            </div>
+        
+        {% for c in course %}
+            
+                <div>
+                    <h3>cat: {{c.category}}</h3>
+                    <span>@{{c.teacher_id}}</span>
+                    
+                    <h4>{{c.id}} -- <a href="/course/{{c.id}}">{{c.courseName}}</a></h4>
+                    <span>Description: {{c.description}}</span>
+                    <span>Content: {{c.content}}</span>
+                    <h3>Price: {{c.price}}</h3>
+    
+                    <div>
+                        <button type="button"><a href="/course/{{c.id}}" >Get more Info</a></button>
+                    </div>
+                </div>
+            
         {% endfor %}
             
     </div>
