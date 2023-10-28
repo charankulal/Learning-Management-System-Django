@@ -9,6 +9,9 @@ class Student(models.Model):
     age=models.CharField(max_length=10)
     gender=models.CharField(max_length=20)
     
+    def __str__(self):
+        return self.name
+    
     
 class Teacher(models.Model):
     name = models.CharField(max_length=100)
@@ -19,6 +22,9 @@ class Teacher(models.Model):
     age=models.CharField(max_length=10)
     gender=models.CharField(max_length=20)
     
+    def __str__(self):
+        return self.name
+    
 class Course(models.Model):
     courseName = models.CharField(max_length=200)
     teacher_id=models.ForeignKey(Teacher,on_delete=models.CASCADE)
@@ -27,6 +33,9 @@ class Course(models.Model):
     price=models.CharField(max_length=10)
     category=models.CharField(max_length=200)
     
+    def __str__(self):
+        return self.name
+    
 class PurchaseAndEnrolment(models.Model):
     teacher_id=models.ForeignKey(Teacher,on_delete=models.CASCADE)
     student_id=models.ForeignKey(Student,on_delete=models.CASCADE)
@@ -34,10 +43,16 @@ class PurchaseAndEnrolment(models.Model):
     amount=models.CharField(max_length=10)
     time=models.DateTimeField(auto_now_add=True)
     
+    def __str__(self):
+        return self.name
+    
 class Topic(models.Model):
     teacher_id=models.ForeignKey(Teacher,on_delete=models.CASCADE)
     course_id=models.ForeignKey(Course,on_delete=models.CASCADE)
     content=models.TextField()
     updated_at=models.DateTimeField(auto_now=True)
     published_at=models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return self.name
     
