@@ -1,0 +1,18 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1>Home page template</h1>
+<div>
+    <div>
+        
+        {% for course in courses %}
+            <div>
+                <h4>{{course.id}} -- <a href="{% url 'courses' course.id %}">{{course.name}}</a></h4>
+            </div>
+        {% endfor %}
+            
+    </div>
+</div>
+
+{% endblock content %}
