@@ -2,28 +2,33 @@
 
 {% block content %}
 
-<h1>Home page template</h1>
+<h1 class="text-center text-primary fs-1 my-4">Hot Hit Courses</h1>
 <div>
-    <div>
-        
+    <div class="row">
+
         {% for c in course %}
+
+        <div class="card m-4" style="width: 18rem;">
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{c.category}}
+                <span class="visually-hidden">unread messages</span>
+              </span>
             
-                <div>
-                    <h3>cat: {{c.category}}</h3>
-                    <span>@{{c.teacher_id}}</span>
-                    
-                    <h4>{{c.id}} -- <a href="/course/{{c.id}}">{{c.courseName}}</a></h4>
-                    <span>Description: {{c.description}}</span>
-                    <span>Content: {{c.content}}</span>
-                    <h3>Price: {{c.price}}</h3>
-    
-                    <div>
-                        <button type="button"><a href="/course/{{c.id}}" >Get more Info</a></button>
-                    </div>
+            <div class="card-body">
+                <h5 class="card-title">{{c.courseName}}</h5>
+                <p class="card-text">{{c.description}}.</p>
+                <span class="ml-5 text-success"><b>Instructor:</b> {{c.teacher_id}}</span>
+                <div class="my-3 p-2">
+                    <span class="badge text-bg-secondary">&#8377; {{c.price}}</span>
                 </div>
-            
+                <a class="btn btn-primary" href="/course/{{c.id}}">Get more Info</a>
+            </div>
+        </div>
+
+        
+
         {% endfor %}
-            
+
     </div>
 </div>
 
