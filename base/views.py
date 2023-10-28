@@ -34,5 +34,5 @@ def courses(request,pk):
         if course['id']==int(pk):
             courses=course
             break
-    context={'courses':courses}
-    return render(request,'base/courses.html',context)
+    context1={'courses':courses}
+    return render(request,'base/courses.html',context1)
