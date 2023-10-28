@@ -2,14 +2,32 @@
 
 {% block content %}
 
-<h1>{{course.courseName }}</h1>
+<h1 class="m-4">Course: {{course.courseName }}</h1>
 
-<h3>Author Details: </h3>
-<div class="card text-center" style="width: 18rem;">
-<h4>{{course.teacher_id}}</h4>
+<div class="row" style="margin-left: 4rem;">
+  <h3 class="text-danger">Author Details: </h3>
+<div class="card card-outline-danger" style="width: 24rem;">
     <div class="card-body">
-      {{teacher.name}}
+      <p class="text">Name: {{teacher.name}}</p>
+      <p class="text">Email: {{teacher.email}}</p>
+      <p class="text"> Address: {{teacher.address}}</p>
+      <p class="text"> Mobile: {{teacher.phone}}</p>
+     
+     
     </div>
   </div>
 
+
+</div>
+
+<div class="container mt-4">
+  <p class="fs-2">  Description:  {{course.description}}</p>
+<p class="fs-3">  Content:  {{course.content}}</p>
+
+<p class="fs-3 btn btn-secondary">Price: &#8377; {{course.price}}</p>
+</div>
+
+<div style="margin-left:45rem;">
+  <a class="btn btn-success" href="/" >Buy Now</a>
+</div>
 {% endblock content %}
