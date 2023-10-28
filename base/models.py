@@ -34,7 +34,7 @@ class Course(models.Model):
     category=models.CharField(max_length=200)
     
     def __str__(self):
-        return self.name
+        return self.courseName
     
 class PurchaseAndEnrolment(models.Model):
     teacher_id=models.ForeignKey(Teacher,on_delete=models.CASCADE)
@@ -44,7 +44,7 @@ class PurchaseAndEnrolment(models.Model):
     time=models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.name
+        return self.amount
     
 class Topic(models.Model):
     teacher_id=models.ForeignKey(Teacher,on_delete=models.CASCADE)
@@ -54,5 +54,5 @@ class Topic(models.Model):
     published_at=models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.name
+        return self.content
     
