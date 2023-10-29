@@ -20,7 +20,11 @@ def studentMainPage(request,pk):
     context = {'course': course, 'q': q,'student':student}
     return render(request,'base/student_main_page.html',context)
 
-
+def studentRegister(request):
+    context={}
+    return render(request,'base/student_register.html',context)
+    
+    
 def loginPage(request):
     context = {}
 
