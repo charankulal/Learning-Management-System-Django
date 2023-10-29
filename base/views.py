@@ -4,7 +4,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import authenticate, login, logout
 from .models import Course, Teacher, Topic, Student, PurchaseAndEnrolment
 
-st='email'
+login_status=False
 
 def studentMainPage(request,pk):
     if request.GET.get('q') != None:
@@ -31,7 +31,7 @@ def loginPage(request):
         try:
             student = Student.objects.get(email=email)
             if student.password == password:
-                           
+                login_status=True           
                 return redirect('studentmain',student)
 
         except:
