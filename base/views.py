@@ -1,7 +1,31 @@
 from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth import authenticate,login,logout
 from .models import Course,Teacher,Topic,Student,PurchaseAndEnrolment
 
-
+def loginPage(request):
+    context={} 
+    
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password=request.POST.get('password')
+        
+        try:
+            student=Student.objects.get(email=email)
+            if student.password==password:
+                
+                return redirect('home')
+            
+            
+        except:
+            messages.error(request,"User Doesn't exist")
+        
+        
+       
+        
+       
+        
+    return render(request,'base/register_login.html',context)
 
 def home(request):
     if request.GET.get('q')!=None:
