@@ -1,11 +1,18 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Course,Teacher,Topic,Student,PurchaseAndEnrolment
 
 
 
 def home(request):
-    course=Course.objects.all()
-    context={'course':course}
+    if request.GET.get('q')!=None:
+        q=request.GET.get('q')
+        course=Course.objects.filter(courseName__icontains=q)
+        
+    else:
+        course=Course.objects.all()
+        q="All"
+
+    context={'course':course,'q':q}
     return render(request,'base/home.html',context)
 
 def courses(request,pk):

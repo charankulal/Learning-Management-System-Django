@@ -2,7 +2,12 @@
 
 {% block content %}
 
-<h1 class="text-center text-primary fs-1 my-4">Hot Hit Courses</h1>
+
+<p class="text-center text-primary fs-1 my-4" style="padding-top: 5rem;">{{q}} Courses</p>
+<p class="text-end text-warning fs-4" >Total {{course.count}} courses</p>
+    
+
+
 <div>
     <div class="row">
 
@@ -21,7 +26,7 @@
                 <div class="my-3 p-2">
                     <span class="badge text-bg-secondary">&#8377; {{c.price}}</span>
                 </div>
-                <a class="btn btn-primary" href="/course/{{c.id}}">Get more Info</a>
+                <a class="btn btn-primary" href="{% url 'course' c.id %}">Get more Info</a>
             </div>
         </div>
 
