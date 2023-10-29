@@ -4,9 +4,9 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth import authenticate, login, logout
 from .models import Course, Teacher, Topic, Student, PurchaseAndEnrolment
 
-login_cnd = False
+st='email'
 
-def studentMainPage(request):
+def studentMainPage(request,pk):
     if request.GET.get('q') != None:
         q = request.GET.get('q')
         course = Course.objects.filter(courseName__icontains=q)
@@ -14,8 +14,10 @@ def studentMainPage(request):
     else:
         course = Course.objects.all()
         q = "All"
+        
+    student=Student.objects.get(name=pk)
 
-    context = {'course': course, 'q': q}
+    context = {'course': course, 'q': q,'student':student}
     return render(request,'base/student_main_page.html',context)
 
 
@@ -27,15 +29,10 @@ def loginPage(request):
         password = request.POST.get('password')
 
         try:
-            user = authenticate(request, email=email, password=password)
-            if user is not None:
-                login(request, user)
-            # student = Student.objects.get(email=email)
-            # if student.password == password:
-            #     login_cnd = True
-                # context1={'student':student}
-                # return render(request,'base/student_main_page',context)
-                return redirect('studentmain')
+            student = Student.objects.get(email=email)
+            if student.password == password:
+                           
+                return redirect('studentmain',student)
 
         except:
             messages.error(request, "User Doesn't exist")
