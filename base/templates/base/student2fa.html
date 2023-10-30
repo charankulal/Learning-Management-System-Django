@@ -14,7 +14,8 @@
             <div class="card-body">
               <h5 class="card-title">2 Factor Authentication</h5>
               <p class="card-text">Sent with OTP mail to {{student.email}}</p>
-              <form class="d-flex" role="search" method="get" action="">
+              <form class="d-flex" method="post" action="">
+                {% csrf_token %}
                 <input class="form-control me-2" type="otp" placeholder="Enter OTP" aria-label="otp" name="otp">
                 <button class="btn btn-outline-success" type="submit">Verify</button>
             </form>

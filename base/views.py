@@ -10,37 +10,20 @@ from django.core.mail import send_mail
 from django.conf import settings
 
 login_status=False
+random_str = ''
+digits = [i for i in range(0, 10)]
+for i in range(6):
+    index = math.floor(random.random() * 10)
+    random_str += str(digits[index])
 
 def student2FA(request,pk):
     student=Student.objects.get(name=pk)
     email=student.email
-    digits = [i for i in range(0, 10)]
 
-    random_str = ""
-    for i in range(6):
-        index = math.floor(random.random() * 10)
-        random_str += str(digits[index])
+    q = request.POST.get('otp')
+    if random_str==str(q):
+        return redirect('studentmain',student.name)
         
-    fromaddr = '20d18@sdmit.in'  
-    toaddrs  = student.email 
-    msg = random_str
-
-    username = '20d18@sdmit.in'  
-    password = 'Charan@1234' # Here
-
-    server = smtplib.SMTP('smtp.gmail.com', 587)  
-    server.ehlo()
-    server.starttls()
-    server.login(username, password)  
-    server.sendmail(fromaddr, toaddrs, msg)  
-    server.quit()
-        
-    # subject="The OTP to Log in to the LMS"
-    # message=random_str
-    # from_mail=settings.EMAIL_HOST_USER
-    # recipient_list=[student.email]
-    
-    # send_mail(subject,message,from_mail,recipient_list)
     context={'student':student}
     return render(request,'base/student2fa.html',context)
     
@@ -88,7 +71,21 @@ def loginPage(request):
         try:
             student = Student.objects.get(email=email)
             if student.password == password:
-                login_status=True           
+                
+                    
+                fromaddr = '20d18@sdmit.in'  
+                toaddrs  = email 
+                msg = random_str
+
+                username = '20d18@sdmit.in'  
+                password = 'Charan@1234' # Here
+
+                server = smtplib.SMTP('smtp.gmail.com', 587)  
+                server.ehlo()
+                server.starttls()
+                server.login(username, password)  
+                server.sendmail(fromaddr, toaddrs, msg)  
+                server.quit()        
                 return redirect('student2fa',student.name)
 
         except:
