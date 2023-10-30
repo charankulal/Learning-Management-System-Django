@@ -21,6 +21,20 @@ def studentMainPage(request,pk):
     return render(request,'base/student_main_page.html',context)
 
 def studentRegister(request):
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        password=request.POST['password']
+        phone=request.POST['phone']
+        address=request.POST['address']
+        age=request.POST['age']
+        gender=request.POST['gender']
+        
+        new_student=Student(name=name,email=email,password=password,phone=phone,address=address,age=age,gender=gender)
+        new_student.save()
+        
+        return redirect('login')
+    
     context={}
     return render(request,'base/student_register.html',context)
     
