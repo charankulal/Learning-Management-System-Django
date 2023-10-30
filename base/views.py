@@ -15,10 +15,13 @@ digits = [i for i in range(0, 10)]
 for i in range(6):
     index = math.floor(random.random() * 10)
     random_str += str(digits[index])
+student={}  
+
 
 def student2FA(request,pk):
     student=Student.objects.get(name=pk)
     email=student.email
+    
 
     q = request.POST.get('otp')
     if random_str==str(q):
@@ -117,3 +120,15 @@ def courses(request, pk):
     context = {**context1, **context2}
 
     return render(request, 'base/courses.html', context)
+
+def studentCourses(request, pk):
+    course = Course.objects.get(id=pk)
+    teacher_name = course.teacher_id
+    teacher = Teacher.objects.get(name=teacher_name)
+    context1 = {'course': course}
+
+    context2 = {'teacher': teacher}
+    context3 = {'student': student}
+    context = {**context1, **context2,**context3}
+
+    return render(request, 'base/studentcourses.html', context)
