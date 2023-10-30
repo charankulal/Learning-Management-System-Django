@@ -15,19 +15,20 @@ digits = [i for i in range(0, 10)]
 for i in range(6):
     index = math.floor(random.random() * 10)
     random_str += str(digits[index])
-student={}  
+student1={}  
+context3={}
 
 
 def student2FA(request,pk):
-    student=Student.objects.get(name=pk)
-    email=student.email
+    student1=Student.objects.get(name=pk)
+    email=student1.email
     
 
     q = request.POST.get('otp')
     if random_str==str(q):
-        return redirect('studentmain',student.name)
+        return redirect('studentmain',student1.name)
         
-    context={'student':student}
+    context={'student':student1}
     return render(request,'base/student2fa.html',context)
     
  
@@ -42,8 +43,8 @@ def studentMainPage(request,pk):
         
     student=Student.objects.get(name=pk)
 
-    context = {'course': course, 'q': q,'student':student}
-    return render(request,'base/student_main_page.html',context)
+    context3 = {'course': course, 'q': q,'student':student}
+    return render(request,'base/student_main_page.html',context3)
 
 def studentRegister(request):
     if request.method=='POST':
@@ -121,14 +122,27 @@ def courses(request, pk):
 
     return render(request, 'base/courses.html', context)
 
-def studentCourses(request, pk):
+def studentCourses(request,sk, pk):
     course = Course.objects.get(id=pk)
     teacher_name = course.teacher_id
     teacher = Teacher.objects.get(name=teacher_name)
+    student=Student.objects.get(name=sk)
     context1 = {'course': course}
 
-    context2 = {'teacher': teacher}
+    context2 = {'teacher': teacher,'student':student1}
     context3 = {'student': student}
     context = {**context1, **context2,**context3}
 
     return render(request, 'base/studentcourses.html', context)
+
+def studentMyCourses(request,pk):
+    student=Student.objects.get(name=pk)
+    student_name=student.name
+    purchasedCourses=PurchaseAndEnrolment.objects.get(student_id=student.id)
+    course=Course.objects.get(courseName=purchasedCourses.course_id)
+    teacher_name = course.teacher_id
+    teacher = Teacher.objects.get(name=teacher_name)
+
+    context={'student': student,'course':course,'teacher':teacher}
+
+    return render(request, 'base/studentmycourses.html', context)
