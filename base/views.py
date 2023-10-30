@@ -138,8 +138,8 @@ def studentCourses(request,sk, pk):
 def studentMyCourses(request,pk):
     student=Student.objects.get(name=pk)
     student_name=student.name
-    purchasedCourses=PurchaseAndEnrolment.objects.get(student_id=student.id)
-    course=Course.objects.get(courseName=purchasedCourses.course_id)
+    purchasedCourses=PurchaseAndEnrolment.objects.filter(student_id=student.id)
+    course=Course.objects.filter(courseName=purchasedCourses.course_id)
     teacher_name = course.teacher_id
     teacher = Teacher.objects.get(name=teacher_name)
 
