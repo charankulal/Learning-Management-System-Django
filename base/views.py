@@ -6,6 +6,13 @@ from .models import Course, Teacher, Topic, Student, PurchaseAndEnrolment
 
 login_status=False
 
+def student2FA(request,pk):
+    student=Student.objects.get(name=pk)
+    email=student.email
+    context={'student':student}
+    return render(request,'base/student2fa.html',context)
+    
+    
 def studentMainPage(request,pk):
     if request.GET.get('q') != None:
         q = request.GET.get('q')
@@ -50,7 +57,7 @@ def loginPage(request):
             student = Student.objects.get(email=email)
             if student.password == password:
                 login_status=True           
-                return redirect('studentmain',student)
+                return redirect('student2fa',student.name)
 
         except:
             messages.error(request, "User Doesn't exist")
