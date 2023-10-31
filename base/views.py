@@ -195,10 +195,10 @@ def teacherRegister(request):
         new_Teacher=Teacher(name=name,email=email,password=password,phone=phone,address=address,age=age,gender=gender)
         new_Teacher.save()
         
-        return redirect('login')
+        return redirect('teacherloginpage')
     
     context={}
-    return render(request,'base/student_register.html',context)
+    return render(request,'base/teacher_register.html',context)
 
 def teacherLoginPage(request):
     context = {}
