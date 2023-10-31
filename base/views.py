@@ -166,8 +166,7 @@ def studentBuyCourse(request,sk, pk):
     context1 = {'course': course}
 
     context2 = {'teacher': teacher,'student':student1}
-    context3 = {'student': student}
-    context = {**context1, **context2,**context3}
+    
     try:
         ispurchased=PurchaseAndEnrolment.objects.get(course_id=course.id,student_id=student.id)
     except:
@@ -177,7 +176,8 @@ def studentBuyCourse(request,sk, pk):
     if ispurchased==None:
         new_purchase=PurchaseAndEnrolment(teacher_id=course.teacher_id,student_id=Student.objects.get(id=student.id),course_id=Course.objects.get(id=course.id),amount=course.price)
         new_purchase.save()
-        return redirect('studentmycourse',student.name)
+    context3 = {'student': student,'ispurchased':ispurchased}
+    context = {**context1, **context2,**context3}
     
     
     return render(request, 'base/buynow.html', context)
