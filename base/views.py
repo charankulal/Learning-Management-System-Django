@@ -157,3 +157,27 @@ def studentMyCourseStudy(request,sk,pk):
     context = {**context1, **context2,**context3}
 
     return render(request, 'base/studentmycoursestudy.html', context)
+
+def studentBuyCourse(request,sk, pk):
+    course = Course.objects.get(courseName=pk)
+    teacher_name = course.teacher_id
+    teacher = Teacher.objects.get(name=teacher_name)
+    student=Student.objects.get(name=sk)
+    context1 = {'course': course}
+
+    context2 = {'teacher': teacher,'student':student1}
+    context3 = {'student': student}
+    context = {**context1, **context2,**context3}
+    try:
+        ispurchased=PurchaseAndEnrolment.objects.get(course_id=course.id,student_id=student.id)
+    except:
+        ispurchased=None
+    
+    
+    if ispurchased==None:
+        new_purchase=PurchaseAndEnrolment(teacher_id=course.teacher_id,student_id=Student.objects.get(id=student.id),course_id=Course.objects.get(id=course.id),amount=course.price)
+        new_purchase.save()
+        return redirect('studentmycourse',student.name)
+    
+    
+    return render(request, 'base/buynow.html', context)
