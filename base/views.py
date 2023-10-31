@@ -16,6 +16,7 @@ for i in range(6):
     index = math.floor(random.random() * 10)
     random_str += str(digits[index])
 student1={}  
+teacher1={}  
 context3={}
 
 
@@ -225,9 +226,21 @@ def teacherLoginPage(request):
                 server.login(username, password)  
                 server.sendmail(fromaddr, toaddrs, msg)  
                 server.quit()        
-                return redirect('student2fa',teacher.name)
+                return redirect('teacher2fa',teacher.name)
 
         except:
             messages.error(request, "User Doesn't exist")
 
     return render(request, 'base/teacher_register_login.html', context)
+
+def teacher2FA(request,pk):
+    teacher1=Teacher.objects.get(name=pk)
+    email=teacher1.email
+    
+
+    q = request.POST.get('otp')
+    if random_str==str(q):
+        return redirect('studentmain',teacher1.name)
+        
+    context={'teacher':teacher1}
+    return render(request,'base/teacher2fa.html',context)
