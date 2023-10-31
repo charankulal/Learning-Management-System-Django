@@ -144,13 +144,16 @@ def studentMyCourses(request,pk):
 
 def studentMyCourseStudy(request,sk,pk):
     course = Course.objects.get(id=pk)
+    topics=Topic.objects.filter(course_id=pk)
     teacher_name = course.teacher_id
     teacher = Teacher.objects.get(name=teacher_name)
     student=Student.objects.get(name=sk)
+    purchasedCourses=PurchaseAndEnrolment.objects.filter(student_id=student.id)
+    
     context1 = {'course': course}
 
     context2 = {'teacher': teacher,'student':student1}
-    context3 = {'student': student}
+    context3 = {'student': student,'purchasedCourses':purchasedCourses,'topics':topics}
     context = {**context1, **context2,**context3}
 
     return render(request, 'base/studentmycoursestudy.html', context)
