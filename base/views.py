@@ -181,3 +181,53 @@ def studentBuyCourse(request,sk, pk):
     
     
     return render(request, 'base/buynow.html', context)
+
+def teacherRegister(request):
+    if request.method=='POST':
+        name=request.POST['name']
+        email=request.POST['email']
+        password=request.POST['password']
+        phone=request.POST['phone']
+        address=request.POST['address']
+        age=request.POST['age']
+        gender=request.POST['gender']
+        
+        new_Teacher=Teacher(name=name,email=email,password=password,phone=phone,address=address,age=age,gender=gender)
+        new_Teacher.save()
+        
+        return redirect('login')
+    
+    context={}
+    return render(request,'base/student_register.html',context)
+
+def teacherLoginPage(request):
+    context = {}
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        try:
+            teacher = Teacher.objects.get(email=email)
+            if teacher.password == password:
+                
+                    
+                fromaddr = '20d18@sdmit.in'  
+                toaddrs  = email 
+                msg = random_str
+
+                username = '20d18@sdmit.in'  
+                password = 'Charan@1234' # Here
+
+                server = smtplib.SMTP('smtp.gmail.com', 587)  
+                server.ehlo()
+                server.starttls()
+                server.login(username, password)  
+                server.sendmail(fromaddr, toaddrs, msg)  
+                server.quit()        
+                return redirect('student2fa',teacher.name)
+
+        except:
+            messages.error(request, "User Doesn't exist")
+
+    return render(request, 'base/teacher_register_login.html', context)
