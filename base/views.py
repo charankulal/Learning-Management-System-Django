@@ -293,3 +293,19 @@ def studentsEnrolled(request,sk,pk):
     enrolls=PurchaseAndEnrolment.objects.filter(teacher_id=teacher.id,course_id=course.id)
     context={'teacher':teacher,'course':course,'enrolls':enrolls}
     return render(request,'base/students_enrolled_list.html',context)
+
+def teacherCreateCourse(request,pk):
+    teacher=Teacher.objects.get(name=pk)
+    if request.method=='POST':
+        courseName=request.POST['coursename']
+        description=request.POST['description']
+        content=request.POST['content']
+        price=request.POST['price']
+        category=request.POST['category']
+        
+        new_course=Course(courseName=courseName,teacher_id=Teacher.objects.get(name=pk),description=description,content=content,price=price,category=category)
+        new_course.save()
+        return redirect('teachermycourse',teacher.name)
+    
+    context={'teacher':teacher}
+    return render(request,'base/teacher_create_course.html',context)
