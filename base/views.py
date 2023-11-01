@@ -286,3 +286,10 @@ def deleteCourse(request,sk,pk):
         course.delete()
         return redirect('teachermycourse',teacher.name)
     return render(request,'base/teacher_delete_course.html',{'course':course,'teacher':teacher})
+
+def studentsEnrolled(request,sk,pk):
+    teacher=Teacher.objects.get(name=sk)
+    course=Course.objects.get(courseName=pk)
+    enrolls=PurchaseAndEnrolment.objects.filter(teacher_id=teacher.id,course_id=course.id)
+    context={'teacher':teacher,'course':course,'enrolls':enrolls}
+    return render(request,'base/students_enrolled_list.html',context)
