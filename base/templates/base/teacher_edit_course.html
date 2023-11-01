@@ -93,6 +93,26 @@
         <a href="{% url 'teachermain' teacher.name %}" class="btn btn-danger">Cancel</a>
         </div>
       </form>
+      <div style="margin-left: 45rem; margin-top: 5rem;" >
+        <a href="#" class="btn btn-warning">Add a Topic</a>
+      </div>
+      
+      <p class="fs-2 my-4" >Edit Topics under {{course.courseName}} course</p>
+
+      
+      {% for topic in topics %}
+      <hr>
+      <p class="fs-5 my-2" >{{topic.content}}</p>
+
+      <div class="text-center my-3">
+        <a href="#" class="btn btn-primary">Edit</a>
+        <a href="#" class="btn btn-danger">Delete</a>
+      </div>
+      {% endfor %}
+        
+
+      
+      
 
 
 
