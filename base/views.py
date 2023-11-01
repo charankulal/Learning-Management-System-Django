@@ -347,4 +347,17 @@ def teacherUpdateCourse(request,pk,sk):
         context={'teacher':teacher,'course':course}
     
     return render(request,'base/teacher_edit_course.html',context)
+
+def addTopic(request,sk,pk):
+    teacher=Teacher.objects.get(name=sk)
+    course=Course.objects.get(courseName=pk)
+    context={'teacher':teacher,'course':course}
+    if request.method=='POST':
+        content=request.POST['content']
+        new_topic=Topic(teacher_id=Teacher.objects.get(name=sk),course_id=Course.objects.get(courseName=pk),content=content)
+        new_topic.save()
+        
+        return redirect('teachermycourse',teacher)
+    
+    return render(request,'base/teacher_add_topic.html',context)
         

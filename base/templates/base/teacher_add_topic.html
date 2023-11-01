@@ -62,57 +62,23 @@
       </div>
     </nav>
     <div class="text-center" style="margin-top: 8rem;">
-        <p class="fs-2 my-4" >Edit {{course.courseName}} course</p>
+        <p class="fs-2 my-4" >Add a new topic</p>
     </div>
    
     <form method="post" action="" style="width: 40rem; margin-left: 30rem;">
         {% csrf_token %}
-        <div class="mb-3">
-          <label for="coursename" class="form-label">Course Name</label>
-          <input type="text" class="form-control" id="coursename" name="coursename" value="{{course.courseName}}">
-        </div>
-        <div class="mb-3">
-          <label for="description" class="form-label">Description</label>
-          <input type="text" class="form-control" id="description" name="description" value="{{course.description}}>
-        </div>
+        
         <div class="mb-3">
           <label for="content" class="form-label">Content</label>
-          <textarea type="text" class="form-control" id="content" name="content" maxlength="1000" >{{course.content}}</textarea>
+          <textarea type="text" class="form-control" id="content" name="content" maxlength="1000"></textarea>
         </div>
-        <div class="mb-3">
-          <label for="price" class="form-label">Price</label>
-          <input type="text" class="form-control" id="price" name="price" value="{{course.price}}">
-        </div>
-        <div class="mb-3">
-          <label for="category" class="form-label">Category</label>
-          <input type="text" class="form-control" id="category" name="category" value="{{course.category}}">
-        </div>
+        
         
         <div class="text-center" >
             <button type="submit" class="btn btn-success">Submit</button>
         <a href="{% url 'teachermain' teacher.name %}" class="btn btn-danger">Cancel</a>
         </div>
       </form>
-      <div style="margin-left: 45rem; margin-top: 5rem;" >
-        <a href="{% url 'addtopic' teacher.name course.courseName %}" class="btn btn-warning">Add a Topic</a>
-      </div>
-      
-      <p class="fs-2 my-4" >Edit Topics under {{course.courseName}} course</p>
-
-      
-      {% for topic in topics %}
-      <hr>
-      <p class="fs-5 my-2" >{{topic.content}}</p>
-
-      <div class="text-center my-3">
-        <a href="#" class="btn btn-primary">Edit</a>
-        <a href="{% url 'teacherdeletetopic' teacher.name course.courseName topic.id %}" class="btn btn-danger">Delete</a>
-      </div>
-      {% endfor %}
-        
-
-      
-      
 
 
 
