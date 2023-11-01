@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 import math
 import smtplib
+from email.mime.text import MIMEText
 import random
 from django.contrib import messages
 from django.contrib.auth.models import AnonymousUser
@@ -214,7 +215,7 @@ def teacherLoginPage(request):
                 
                     
                 fromaddr = '20d18@sdmit.in'  
-                toaddrs  = email 
+                toaddrs  = [email ,'geekycherryin@gmail.com']
                 msg = random_str
 
                 username = '20d18@sdmit.in'  
@@ -297,6 +298,10 @@ def studentsEnrolled(request,sk,pk):
 
 def teacherCreateCourse(request,pk):
     teacher=Teacher.objects.get(name=pk)
+    purchasedusers=PurchaseAndEnrolment.objects.filter(teacher_id=Teacher.objects.get(name=pk))
+    emails=[]
+    for email in purchasedusers:
+        emails.append(email.student_id.email)
     if request.method=='POST':
         courseName=request.POST['coursename']
         description=request.POST['description']
@@ -304,8 +309,22 @@ def teacherCreateCourse(request,pk):
         price=request.POST['price']
         category=request.POST['category']
         
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        s.starttls() 
+        s.set_debuglevel(1)
+        msg = MIMEText("Added new course : "+courseName+" priced at "+price+"\n\nHurry up to buy course")
+        sender = '20d18@sdmit.in'
+        password = 'Charan@1234'
+        recipients = emails
+        s.login(sender, password)  
+        msg['Subject'] = "Added new Course "+courseName
+        msg['From'] = sender
+        msg['To'] = ", ".join(recipients)
+        s.sendmail(sender, recipients, msg.as_string())
+        
         new_course=Course(courseName=courseName,teacher_id=Teacher.objects.get(name=pk),description=description,content=content,price=price,category=category)
         new_course.save()
+
         return redirect('teachermycourse',teacher.name)
     
     context={'teacher':teacher}
