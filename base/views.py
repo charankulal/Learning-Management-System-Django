@@ -259,3 +259,15 @@ def teacherMainPage(request,pk):
 
     # context3 = {'course': course, 'q': q,'student':student}
     return render(request,'base/teachermainpage.html',context)
+
+def teacherMyCourses(request,pk):
+    teacher=Teacher.objects.get(name=pk)
+    if request.GET.get('q') != None:
+        q = request.GET.get('q')
+        course = Course.objects.filter(teacher_id=teacher.id,courseName__icontains=q)
+
+    else:
+        course = Course.objects.filter(teacher_id=teacher.id)
+        q = "All"
+    context={'course':course,'teacher':teacher,'q':q}
+    return render(request,'base/teacher_my_course_page.html',context)

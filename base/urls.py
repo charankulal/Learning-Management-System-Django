@@ -17,7 +17,8 @@ urlpatterns = [
     path('teacher/login',views.teacherLoginPage,name='teacherloginpage'),
     path('teacher/register',views.teacherRegister,name='teacherregisterpage'),
     path('teacher/2FA/<str:pk>',views.teacher2FA,name='teacher2fa'),
-    path('teacher/main/<str:pk>',views.teacherMainPage,name="teachermain")
+    path('teacher/main/<str:pk>',views.teacherMainPage,name="teachermain"),
+    path('teacher/mycourses/<str:pk>',views.teacherMyCourses,name="teachermycourse"),
     
 ]
 
