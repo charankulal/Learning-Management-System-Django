@@ -240,7 +240,22 @@ def teacher2FA(request,pk):
 
     q = request.POST.get('otp')
     if random_str==str(q):
-        return redirect('studentmain',teacher1.name)
+        return redirect('teachermain',teacher1.name)
         
     context={'teacher':teacher1}
     return render(request,'base/teacher2fa.html',context)
+
+def teacherMainPage(request,pk):
+    # if request.GET.get('q') != None:
+    #     q = request.GET.get('q')
+    #     course = Course.objects.filter(courseName__icontains=q)
+
+    # else:
+    #     course = Course.objects.all()
+    #     q = "All"
+        
+    teacher=Teacher.objects.get(name=pk)
+    context={'teacher':teacher}
+
+    # context3 = {'course': course, 'q': q,'student':student}
+    return render(request,'base/teachermainpage.html',context)
