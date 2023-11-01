@@ -271,3 +271,10 @@ def teacherMyCourses(request,pk):
         q = "All"
     context={'course':course,'teacher':teacher,'q':q}
     return render(request,'base/teacher_my_course_page.html',context)
+
+def teacherCourseView(request,pk,sk):
+    teacher=Teacher.objects.get(name=sk)
+    course=Course.objects.get(courseName=pk)
+    topics=Topic.objects.filter(teacher_id=teacher.id,course_id=course.id)
+    context={'teacher':teacher,'course':course,'topics':topics}
+    return render(request,'base/teacher_course_view.html',context)

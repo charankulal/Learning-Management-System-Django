@@ -19,6 +19,7 @@ urlpatterns = [
     path('teacher/2FA/<str:pk>',views.teacher2FA,name='teacher2fa'),
     path('teacher/main/<str:pk>',views.teacherMainPage,name="teachermain"),
     path('teacher/mycourses/<str:pk>',views.teacherMyCourses,name="teachermycourse"),
+    path('teacher/mycourses/<str:sk>/<str:pk>',views.teacherCourseView,name="teachercourseview"),
     
 ]
 
