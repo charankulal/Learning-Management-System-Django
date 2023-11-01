@@ -106,7 +106,7 @@
 
       <div class="text-center my-3">
         <a href="#" class="btn btn-primary">Edit</a>
-        <a href="#" class="btn btn-danger">Delete</a>
+        <a href="{% url 'teacherdeletetopic' teacher.name course.courseName topic.id %}" class="btn btn-danger">Delete</a>
       </div>
       {% endfor %}
         

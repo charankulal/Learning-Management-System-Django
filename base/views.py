@@ -279,6 +279,15 @@ def deleteCourse(request,sk,pk):
         return redirect('teachermycourse',teacher.name)
     return render(request,'base/teacher_delete_course.html',{'course':course,'teacher':teacher})
 
+def deleteTopic(request,sk,pk,tk):
+    teacher=Teacher.objects.get(name=sk)
+    course=Course.objects.get(courseName=pk)
+    topic=Topic.objects.get(id=tk)
+    if request.method=='POST':
+        topic.delete()
+        return redirect('teachermycourse',teacher.name)
+    return render(request,'base/teacher_delete_topic.html',{'course':course,'teacher':teacher})
+
 def studentsEnrolled(request,sk,pk):
     teacher=Teacher.objects.get(name=sk)
     course=Course.objects.get(courseName=pk)

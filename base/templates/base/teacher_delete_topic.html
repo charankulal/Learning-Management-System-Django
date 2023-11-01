@@ -61,12 +61,12 @@
       </div>
     </nav>
 
-    <h1 class="text-center text-bold" style="padding-top: 8rem;">Delete a course</h1>
+    <h1 class="text-center text-bold" style="padding-top: 8rem;">Delete a topic</h1>
 <div style="padding-top: 2rem;padding-right:30rem; padding-left: 30rem; ">
     <form method="POST" action="">
         {% csrf_token %}
-        <p>Are you sure  you want to delete course {{course.courseName}}?</p>
-        <a href="{% url 'teachermycourse' teacher.name %}" class="btn btn-primary">Go back</a>
+        <p>Are you sure  you want to delete the topic in {{course.courseName}}?</p>
+        <a href="{% url 'teachercourseview' teacher.name course.courseName %}" class="btn btn-primary">Go back</a>
         <input type="submit" class="btn btn-danger" name="confirm" id="confirm" value="Yes.. Delete!">
         </form>
         </div>
