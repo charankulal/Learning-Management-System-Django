@@ -48,6 +48,7 @@
                 >My Courses</a
               >
             </li>
+
             <li class="nav-item mx-5">
               <a
                 class="nav-link active"
@@ -57,66 +58,43 @@
               >
             </li>
           </ul>
-          <form class="d-flex" role="search" method="get" action="">
-            <input
-              class="form-control me-2"
-              type="search"
-              placeholder="Search courses"
-              aria-label="Search"
-              name="q"
-            />
-            <button class="btn btn-outline-success" type="submit">
-              Search
-            </button>
-          </form>
         </div>
       </div>
     </nav>
-    <p class="text-center text-primary fs-1 my-4" style="padding-top: 5rem">
-      {{q}} Courses
-    </p>
-    <p class="text-end text-warning fs-5">
-      Total {{course.count}} courses are published
-    </p>
-
-    <div class="row">
-      {% for c in course %}
-
-      <div class="card m-4 col-10">
-        <span
-          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-        >
-          {{c.category}}
-          <span class="visually-hidden">unread messages</span>
-        </span>
-
-        <div class="card-body">
-          <h5 class="card-title">{{c.courseName}}</h5>
-          <p class="card-text">{{c.description}}.</p>
-          <div class="my-1 p-2">
-            <span class="badge text-bg-secondary">&#8377; {{c.price}}</span>
-          </div>
-        </div>
-
-        <div class="text-center m-1">
-          <a
-            class="btn btn-success mx-4"
-            type="button"
-            href="{% url 'teachercourseview' teacher.name c.courseName %}"
-            >View</a
-          >
-          <a class="btn btn-warning mx-4" type="button" href="{% url 'updatecourse' teacher.name c.courseName %}"
-            >Edit course</a
-          >
-          <a class="btn btn-danger mx-4" type="button" 
-          href="{% url 'teacherdeletecourse' teacher.name c.courseName %}"
-            >Delete course</a
-          >
-        </div>
-      </div>
-
-      {% endfor %}
+    <div class="text-center" style="margin-top: 8rem;">
+        <p class="fs-2 my-4" >Edit {{course.courseName}} course</p>
     </div>
+   
+    <form method="post" action="" style="width: 40rem; margin-left: 30rem;">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="coursename" class="form-label">Course Name</label>
+          <input type="text" class="form-control" id="coursename" name="coursename" value="{{course.courseName}}">
+        </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <input type="text" class="form-control" id="description" name="description" value="{{course.description}}>
+        </div>
+        <div class="mb-3">
+          <label for="content" class="form-label">Content</label>
+          <textarea type="text" class="form-control" id="content" name="content" maxlength="1000" >{{course.content}}</textarea>
+        </div>
+        <div class="mb-3">
+          <label for="price" class="form-label">Price</label>
+          <input type="text" class="form-control" id="price" name="price" value="{{course.price}}">
+        </div>
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <input type="text" class="form-control" id="category" name="category" value="{{course.category}}">
+        </div>
+        
+        <div class="text-center" >
+            <button type="submit" class="btn btn-success">Submit</button>
+        <a href="{% url 'teachermain' teacher.name %}" class="btn btn-danger">Cancel</a>
+        </div>
+      </form>
+
+
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"

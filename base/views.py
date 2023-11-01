@@ -245,15 +245,7 @@ def teacher2FA(request,pk):
     context={'teacher':teacher1}
     return render(request,'base/teacher2fa.html',context)
 
-def teacherMainPage(request,pk):
-    # if request.GET.get('q') != None:
-    #     q = request.GET.get('q')
-    #     course = Course.objects.filter(courseName__icontains=q)
-
-    # else:
-    #     course = Course.objects.all()
-    #     q = "All"
-        
+def teacherMainPage(request,pk):        
     teacher=Teacher.objects.get(name=pk)
     context={'teacher':teacher}
 
@@ -309,3 +301,41 @@ def teacherCreateCourse(request,pk):
     
     context={'teacher':teacher}
     return render(request,'base/teacher_create_course.html',context)
+
+def teacherUpdateCourse(request,pk,sk):
+    teacher=Teacher.objects.get(name=pk)
+    course=Course.objects.get(courseName=sk)
+    topics=Topic.objects.filter(teacher_id=teacher.id,course_id=course.id)
+    if request.method=='POST':
+        courseName=request.POST['coursename']
+        description=request.POST['description']
+        content=request.POST['content']
+        price=request.POST['price']
+        category=request.POST['category']
+        
+        new_course=Course.objects.get(id=course.id,teacher_id=Teacher.objects.get(name=pk))
+        
+        new_course.courseName=courseName
+        new_course.teacher_id=Teacher.objects.get(name=teacher.name)
+        new_course.description=description
+        new_course.content=content
+        new_course.price=price
+        new_course.category=category
+        
+        new_course.save()
+        course=Course.objects.get(courseName=new_course.courseName)
+        if topics:
+            context={'teacher':teacher,'course':course,'topics':topics}  
+        else:
+            context={'teacher':teacher}
+        
+        return redirect('teachermycourse',teacher)
+    
+    course=Course.objects.get(courseName=sk)
+    if topics:
+        context={'teacher':teacher,'course':course,'topics':topics}  
+    else:
+        context={'teacher':teacher,'course':course}
+    
+    return render(request,'base/teacher_edit_course.html',context)
+        

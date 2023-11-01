@@ -23,6 +23,7 @@ urlpatterns = [
     path('teacher/mycourses/delete/<str:sk>/<str:pk>',views.deleteCourse,name="teacherdeletecourse"),
     path('teacher/mycourses/students/<str:sk>/<str:pk>',views.studentsEnrolled,name="studentsenrolled"),
     path('teacher/createcourse/<str:pk>',views.teacherCreateCourse,name="createcourse"),
+    path('teacher/updatecourse/<str:pk>/<str:sk>',views.teacherUpdateCourse,name="updatecourse"),
     
 ]
 
