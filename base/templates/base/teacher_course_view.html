@@ -61,18 +61,33 @@
       </div>
     </nav>
     <p class="text-center text-primary fs-1 my-4" style="padding-top: 5rem">
-      {{course.courseName}} Course <span class="text-end text-muted">Under {{course.category}} category</span>
+      {{course.courseName}} Course
+      <span class="text-end text-muted"
+        >Under {{course.category}} category</span
+      >
     </p>
     <div class="m-3">
-        <p class="fs-3">Topics</p>
+      <p class="fs-3 text-warning">Description</p>
+      <hr />
+      <p class="m-2 fs-5">{{course.description}}</p>
+      <hr />
+      <p class="fs-3 text-warning">Content</p>
+      <hr />
+      <p class="m-2 fs-5">{{course.content}}</p>
+      <hr />
+      <p class="fs-3 text-warning">Price</p>
+      <hr />
+      <p class="m-2 fs-5">&#8377; {{course.price}}</p>
+    </div>
+    <div class="m-3">
+      <p class="fs-3 text-warning">Topics</p>
 
-        <hr>
-        
-        {% for topic in topics %}
-        <p class="fs-6 my-3">{{topic.content}}</p>
-            <hr>
-        {% endfor %}
-            
+      <hr />
+
+      {% for topic in topics %}
+      <p class="fs-6 my-3">{{topic.content}}</p>
+      <hr />
+      {% endfor %}
     </div>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
