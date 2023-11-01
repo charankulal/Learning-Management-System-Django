@@ -371,10 +371,26 @@ def addTopic(request,sk,pk):
     teacher=Teacher.objects.get(name=sk)
     course=Course.objects.get(courseName=pk)
     context={'teacher':teacher,'course':course}
+    purchasedusers=PurchaseAndEnrolment.objects.filter(teacher_id=Teacher.objects.get(name=sk),course_id=Course.objects.get(courseName=pk))
+    emails=[]
+    for email in purchasedusers:
+        emails.append(email.student_id.email)
     if request.method=='POST':
         content=request.POST['content']
         new_topic=Topic(teacher_id=Teacher.objects.get(name=sk),course_id=Course.objects.get(courseName=pk),content=content)
         new_topic.save()
+        s = smtplib.SMTP('smtp.gmail.com', 587)
+        s.starttls() 
+        s.set_debuglevel(1)
+        msg = MIMEText("Added new topic in : "+course.courseName+" \n\n Content is "+new_topic.content+"\n\nAll the best")
+        sender = '20d18@sdmit.in'
+        password = 'Charan@1234'
+        recipients = emails
+        s.login(sender, password)  
+        msg['Subject'] = "Added new topic in "+course.courseName
+        msg['From'] = sender
+        msg['To'] = ", ".join(recipients)
+        s.sendmail(sender, recipients, msg.as_string())
         
         return redirect('teachermycourse',teacher)
     
