@@ -278,3 +278,11 @@ def teacherCourseView(request,pk,sk):
     topics=Topic.objects.filter(teacher_id=teacher.id,course_id=course.id)
     context={'teacher':teacher,'course':course,'topics':topics}
     return render(request,'base/teacher_course_view.html',context)
+
+def deleteCourse(request,sk,pk):
+    teacher=Teacher.objects.get(name=sk)
+    course=Course.objects.get(courseName=pk)
+    if request.method=='POST':
+        course.delete()
+        return redirect('teachermycourse',teacher.name)
+    return render(request,'base/teacher_delete_course.html',{'course':course,'teacher':teacher})
