@@ -24,7 +24,7 @@ context3={}
 def student2FA(request,pk):
     student1=Student.objects.get(name=pk)
     email=student1.email
-    
+    authenticate()
 
     q = request.POST.get('otp')
     if random_str==str(q):
