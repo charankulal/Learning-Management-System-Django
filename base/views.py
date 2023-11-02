@@ -21,10 +21,11 @@ teacher1={}
 context3={}
 
 
+
 def student2FA(request,pk):
     student1=Student.objects.get(name=pk)
     email=student1.email
-    authenticate()
+    request.session['email'] = email
 
     q = request.POST.get('otp')
     if random_str==str(q):
@@ -35,17 +36,23 @@ def student2FA(request,pk):
     
  
 def studentMainPage(request,pk):
-    if request.GET.get('q') != None:
-        q = request.GET.get('q')
-        course = Course.objects.filter(courseName__icontains=q)
-
-    else:
-        course = Course.objects.all()
-        q = "All"
-        
     student=Student.objects.get(name=pk)
+    try:
+        if request.session['email'] ==student.email:
+            if request.GET.get('q') != None:
+                q = request.GET.get('q')
+                course = Course.objects.filter(courseName__icontains=q)
 
-    context3 = {'course': course, 'q': q,'student':student}
+            else:
+                course = Course.objects.all()
+                q = "All"
+                
+            
+
+            context3 = {'course': course, 'q': q,'student':student}
+            
+    except:
+        return redirect('login')
     return render(request,'base/student_main_page.html',context3)
 
 def studentRegister(request):
@@ -129,18 +136,26 @@ def studentCourses(request,sk, pk):
     teacher_name = course.teacher_id
     teacher = Teacher.objects.get(name=teacher_name)
     student=Student.objects.get(name=sk)
-    context1 = {'course': course}
+    try:
+        if request.session['email'] ==student.email:
+            context1 = {'course': course}
 
-    context2 = {'teacher': teacher,'student':student1}
-    context3 = {'student': student}
-    context = {**context1, **context2,**context3}
+            context2 = {'teacher': teacher,'student':student1}
+            context3 = {'student': student}
+            context = {**context1, **context2,**context3}
+    except:
+        return redirect('login')
 
     return render(request, 'base/studentcourses.html', context)
 
 def studentMyCourses(request,pk):
     student=Student.objects.get(name=pk)
     purchasedCourses=PurchaseAndEnrolment.objects.filter(student_id=student.id)
-    context={'student':student,'purchasedCourses':purchasedCourses}
+    try:
+        if request.session['email'] ==student.email:
+            context={'student':student,'purchasedCourses':purchasedCourses}
+    except:
+        return redirect('login')
 
     return render(request, 'base/studentmycourses.html', context)
 
@@ -151,12 +166,16 @@ def studentMyCourseStudy(request,sk,pk):
     teacher = Teacher.objects.get(name=teacher_name)
     student=Student.objects.get(name=sk)
     purchasedCourses=PurchaseAndEnrolment.objects.filter(student_id=student.id)
+    try:
+        if request.session['email'] ==student.email:
     
-    context1 = {'course': course}
+            context1 = {'course': course}
 
-    context2 = {'teacher': teacher,'student':student1}
-    context3 = {'student': student,'purchasedCourses':purchasedCourses,'topics':topics}
-    context = {**context1, **context2,**context3}
+            context2 = {'teacher': teacher,'student':student1}
+            context3 = {'student': student,'purchasedCourses':purchasedCourses,'topics':topics}
+            context = {**context1, **context2,**context3}
+    except:
+        return redirect('login')
 
     return render(request, 'base/studentmycoursestudy.html', context)
 
@@ -165,22 +184,25 @@ def studentBuyCourse(request,sk, pk):
     teacher_name = course.teacher_id
     teacher = Teacher.objects.get(name=teacher_name)
     student=Student.objects.get(name=sk)
-    context1 = {'course': course}
-
-    context2 = {'teacher': teacher,'student':student1}
-    
     try:
-        ispurchased=PurchaseAndEnrolment.objects.get(course_id=course.id,student_id=student.id)
+        if request.session['email'] ==student.email:
+            context1 = {'course': course}
+
+            context2 = {'teacher': teacher,'student':student1}
+            
+            try:
+                ispurchased=PurchaseAndEnrolment.objects.get(course_id=course.id,student_id=student.id)
+            except:
+                ispurchased=None
+            
+            
+            if ispurchased==None:
+                new_purchase=PurchaseAndEnrolment(teacher_id=course.teacher_id,student_id=Student.objects.get(id=student.id),course_id=Course.objects.get(id=course.id),amount=course.price)
+                new_purchase.save()
+            context3 = {'student': student,'ispurchased':ispurchased}
+            context = {**context1, **context2,**context3}
     except:
-        ispurchased=None
-    
-    
-    if ispurchased==None:
-        new_purchase=PurchaseAndEnrolment(teacher_id=course.teacher_id,student_id=Student.objects.get(id=student.id),course_id=Course.objects.get(id=course.id),amount=course.price)
-        new_purchase.save()
-    context3 = {'student': student,'ispurchased':ispurchased}
-    context = {**context1, **context2,**context3}
-    
+        return redirect('login')
     
     return render(request, 'base/buynow.html', context)
 
