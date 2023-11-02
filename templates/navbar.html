@@ -10,12 +10,21 @@
                 <li class="nav-item mx-5">
                     <a class="nav-link active" aria-current="page" href="/">Home</a>
                 </li>
+                
+                {% if request.session.email %}
+                <li class="nav-item mx-5">
+                    <a class="nav-link active btn btn-primary " aria-current="page" href="{% url 'logout' %}">Logout</a>
+                </li>
+                {% else %}
+                
                 <li class="nav-item mx-5">
                     <a class="nav-link active btn btn-primary " aria-current="page" href="{% url 'login' %}">Are you Student?<u>Login</u></a>
                 </li>
                 <li class="nav-item mx-5">
                     <a class="nav-link active btn btn-secondary" aria-current="page" href="{% url 'teacherloginpage' %}">Are you Teacher?<u>Login</u></a>
                 </li>
+                {% endif %}
+                    
 
 
             </ul>
