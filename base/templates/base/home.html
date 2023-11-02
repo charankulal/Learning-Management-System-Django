@@ -1,50 +1,37 @@
+{% extends 'main.html' %} {% block content %}
 
-{% extends 'main.html' %}
+<p class="text-center text-primary fs-1 my-4" style="padding-top: 5rem">
+  {{q}} Courses
+</p>
+<p class="text-end text-warning fs-5">
+  Total {{course.count}} Available courses available
+</p>
 
+<div class="row">
+  {% for c in course %}
 
+  <div class="card m-4" style="width: 18rem">
+    <span
+      class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+    >
+      {{c.category}}
+      <span class="visually-hidden">unread messages</span>
+    </span>
 
-
-{% block content %}
-
-
-
-
-<p class="text-center text-primary fs-1 my-4" style="padding-top: 5rem;">{{q}} Courses</p>
-<p class="text-end text-warning fs-5" >Total {{course.count}} Available courses available</p>
-
-    
-
-
-
-    <div class="row">
-
-        {% for c in course %}
-
-        <div class="card m-4" style="width: 18rem;">
-            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                {{c.category}}
-                <span class="visually-hidden">unread messages</span>
-              </span>
-            
-            <div class="card-body">
-                <h5 class="card-title">{{c.courseName}}</h5>
-                <p class="card-text">{{c.description}}.</p>
-                <span class="ml-5 text-success"><b>Instructor:</b> {{c.teacher_id}}</span>
-                <div class="my-3 p-2">
-                    <span class="badge text-bg-secondary">&#8377; {{c.price}}</span>
-                </div>
-                <a class="btn btn-primary" href="{% url 'course' c.id %}">Get more Info</a>
-            </div>
-        </div>
-
-        
-
-        {% endfor %}
-
+    <div class="card-body">
+      <h5 class="card-title">{{c.courseName}}</h5>
+      <p class="card-text">{{c.description}}.</p>
+      <span class="ml-5 text-success"><b>Instructor:</b> {{c.teacher_id}}</span>
+      <div class="my-3 p-2">
+        <span class="badge text-bg-secondary">&#8377; {{c.price}}</span>
+      </div>
+      <a class="btn btn-primary" href="{% url 'course' c.id %}"
+        >Get more Info</a
+      >
     </div>
+  </div>
 
-
-
-
+  {% endfor %}
+</div>
 
 {% endblock content %}

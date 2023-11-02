@@ -1,34 +1,27 @@
-{% extends 'main.html' %}
+{% extends 'main.html' %} {% block content %}
 
-{% block content %}
+<h1 class="m-4" style="padding-top: 5rem">Course: {{course.courseName }}</h1>
 
-<h1 class="m-4" style="padding-top: 5rem;">Course: {{course.courseName }}</h1>
-
-<div class="row" style="margin-left: 4rem;">
-  <h3 class="text-danger">Author Details: </h3>
-<div class="card card-outline-danger" style="width: 24rem;">
+<div class="row" style="margin-left: 4rem">
+  <h3 class="text-danger">Author Details:</h3>
+  <div class="card card-outline-danger" style="width: 24rem">
     <div class="card-body">
       <p class="text">Name: {{teacher.name}}</p>
       <p class="text">Email: {{teacher.email}}</p>
-      <p class="text"> Address: {{teacher.address}}</p>
-      <p class="text"> Mobile: {{teacher.phone}}</p>
-     
-     
+      <p class="text">Address: {{teacher.address}}</p>
+      <p class="text">Mobile: {{teacher.phone}}</p>
     </div>
   </div>
-
-
 </div>
 
 <div class="container mt-4">
-  <p class="fs-2">  Description:  {{course.description}}</p>
-<p class="fs-3">  Content:  {{course.content}}</p>
+  <p class="fs-2">Description: {{course.description}}</p>
+  <p class="fs-3">Content: {{course.content}}</p>
 
-<p class="fs-3 btn btn-secondary">Price: &#8377; {{course.price}}</p>
+  <p class="fs-3 btn btn-secondary">Price: &#8377; {{course.price}}</p>
 </div>
 <p class="text-center text-danger fs-4">You need to register or log in</p>
-<div style="margin-left:45rem;">
-  
-  <button class="btn btn-success" type="button" disabled >Buy Now</button>
+<div style="margin-left: 45rem">
+  <button class="btn btn-success" type="button" disabled>Buy Now</button>
 </div>
 {% endblock content %}

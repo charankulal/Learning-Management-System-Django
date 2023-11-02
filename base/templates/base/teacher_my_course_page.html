@@ -52,7 +52,7 @@
               <a
                 class="nav-link active"
                 aria-current="page"
-                href="{% url 'home' %}"
+                href="{% url 'logout' %}"
                 >Logout</a
               >
             </li>
@@ -105,11 +105,16 @@
             href="{% url 'teachercourseview' teacher.name c.courseName %}"
             >View</a
           >
-          <a class="btn btn-warning mx-4" type="button" href="{% url 'updatecourse' teacher.name c.courseName %}"
+          <a
+            class="btn btn-warning mx-4"
+            type="button"
+            href="{% url 'updatecourse' teacher.name c.courseName %}"
             >Edit course</a
           >
-          <a class="btn btn-danger mx-4" type="button" 
-          href="{% url 'teacherdeletecourse' teacher.name c.courseName %}"
+          <a
+            class="btn btn-danger mx-4"
+            type="button"
+            href="{% url 'teacherdeletecourse' teacher.name c.courseName %}"
             >Delete course</a
           >
         </div>

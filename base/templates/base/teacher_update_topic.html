@@ -53,7 +53,7 @@
               <a
                 class="nav-link active"
                 aria-current="page"
-                href="{% url 'home' %}"
+                href="{% url 'logout' %}"
                 >Logout</a
               >
             </li>
@@ -76,7 +76,9 @@
           id="content"
           name="content"
           maxlength="1000"
-        >{{topic.content}}</textarea>
+        >
+{{topic.content}}</textarea
+        >
       </div>
 
       <div class="text-center">

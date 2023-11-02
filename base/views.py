@@ -259,7 +259,7 @@ def teacherLoginPage(request):
 def teacher2FA(request,pk):
     teacher1=Teacher.objects.get(name=pk)
     email=teacher1.email
-    
+    request.session['email'] = email
 
     q = request.POST.get('otp')
     if random_str==str(q):
@@ -270,84 +270,110 @@ def teacher2FA(request,pk):
 
 def teacherMainPage(request,pk):        
     teacher=Teacher.objects.get(name=pk)
-    context={'teacher':teacher}
-
-    # context3 = {'course': course, 'q': q,'student':student}
+    try:
+        if request.session['email'] ==teacher.email:
+            context={'teacher':teacher}
+    except:
+        return redirect('teacherloginpage')
     return render(request,'base/teachermainpage.html',context)
 
 def teacherMyCourses(request,pk):
     teacher=Teacher.objects.get(name=pk)
-    if request.GET.get('q') != None:
-        q = request.GET.get('q')
-        course = Course.objects.filter(teacher_id=teacher.id,courseName__icontains=q)
+    try:
+        if request.session['email'] ==teacher.email:
+            if request.GET.get('q') != None:
+                q = request.GET.get('q')
+                course = Course.objects.filter(teacher_id=teacher.id,courseName__icontains=q)
 
-    else:
-        course = Course.objects.filter(teacher_id=teacher.id)
-        q = "All"
-    context={'course':course,'teacher':teacher,'q':q}
+            else:
+                course = Course.objects.filter(teacher_id=teacher.id)
+                q = "All"
+            context={'course':course,'teacher':teacher,'q':q}
+    except:
+        return redirect('teacherloginpage')
     return render(request,'base/teacher_my_course_page.html',context)
 
 def teacherCourseView(request,pk,sk):
     teacher=Teacher.objects.get(name=sk)
     course=Course.objects.get(courseName=pk)
     topics=Topic.objects.filter(teacher_id=teacher.id,course_id=course.id)
-    context={'teacher':teacher,'course':course,'topics':topics}
+    try:
+        if request.session['email'] ==teacher.email:
+            context={'teacher':teacher,'course':course,'topics':topics}
+    except:
+        return redirect('teacherloginpage')
     return render(request,'base/teacher_course_view.html',context)
 
 def deleteCourse(request,sk,pk):
     teacher=Teacher.objects.get(name=sk)
     course=Course.objects.get(courseName=pk)
-    if request.method=='POST':
-        course.delete()
-        return redirect('teachermycourse',teacher.name)
+    try:
+        if request.session['email'] ==teacher.email:
+            if request.method=='POST':
+                course.delete()
+                return redirect('teachermycourse',teacher.name)
+    except:
+        return redirect('teacherloginpage')
     return render(request,'base/teacher_delete_course.html',{'course':course,'teacher':teacher})
 
 def deleteTopic(request,sk,pk,tk):
     teacher=Teacher.objects.get(name=sk)
     course=Course.objects.get(courseName=pk)
     topic=Topic.objects.get(id=tk)
-    if request.method=='POST':
-        topic.delete()
-        return redirect('teachermycourse',teacher.name)
+    try:
+        if request.session['email'] ==teacher.email:
+            if request.method=='POST':
+                topic.delete()
+                return redirect('teachermycourse',teacher.name)
+    except:
+        return redirect('teacherloginpage')
     return render(request,'base/teacher_delete_topic.html',{'course':course,'teacher':teacher})
 
 def studentsEnrolled(request,sk,pk):
     teacher=Teacher.objects.get(name=sk)
     course=Course.objects.get(courseName=pk)
     enrolls=PurchaseAndEnrolment.objects.filter(teacher_id=teacher.id,course_id=course.id)
-    context={'teacher':teacher,'course':course,'enrolls':enrolls}
+    try:
+        if request.session['email'] ==teacher.email:
+            context={'teacher':teacher,'course':course,'enrolls':enrolls}
+    except:
+        return redirect('teacherloginpage')
     return render(request,'base/students_enrolled_list.html',context)
 
 def teacherCreateCourse(request,pk):
     teacher=Teacher.objects.get(name=pk)
     purchasedusers=PurchaseAndEnrolment.objects.filter(teacher_id=Teacher.objects.get(name=pk))
     emails=[]
-    for email in purchasedusers:
-        emails.append(email.student_id.email)
-    if request.method=='POST':
-        courseName=request.POST['coursename']
-        description=request.POST['description']
-        content=request.POST['content']
-        price=request.POST['price']
-        category=request.POST['category']
-        
-        s = smtplib.SMTP('smtp.gmail.com', 587)
-        s.starttls() 
-        s.set_debuglevel(1)
-        msg = MIMEText("Added new course : "+courseName+" priced at "+price+"\n\nHurry up to buy course")
-        sender = '20d18@sdmit.in'
-        password = 'Charan@1234'
-        recipients = emails
-        s.login(sender, password)  
-        msg['Subject'] = "Added new Course "+courseName
-        msg['From'] = sender
-        msg['To'] = ", ".join(recipients)
-        s.sendmail(sender, recipients, msg.as_string())
-        
-        new_course=Course(courseName=courseName,teacher_id=Teacher.objects.get(name=pk),description=description,content=content,price=price,category=category)
-        new_course.save()
+    try:
+        if request.session['email'] ==teacher.email:
+            for email in purchasedusers:
+                emails.append(email.student_id.email)
+            if request.method=='POST':
+                courseName=request.POST['coursename']
+                description=request.POST['description']
+                content=request.POST['content']
+                price=request.POST['price']
+                category=request.POST['category']
+                
+                s = smtplib.SMTP('smtp.gmail.com', 587)
+                s.starttls() 
+                s.set_debuglevel(1)
+                msg = MIMEText("Added new course : "+courseName+" priced at "+price+"\n\nHurry up to buy course")
+                sender = '20d18@sdmit.in'
+                password = 'Charan@1234'
+                recipients = emails
+                s.login(sender, password)  
+                msg['Subject'] = "Added new Course "+courseName
+                msg['From'] = sender
+                msg['To'] = ", ".join(recipients)
+                s.sendmail(sender, recipients, msg.as_string())
+                
+                new_course=Course(courseName=courseName,teacher_id=Teacher.objects.get(name=pk),description=description,content=content,price=price,category=category)
+                new_course.save()
 
-        return redirect('teachermycourse',teacher.name)
+                return redirect('teachermycourse',teacher.name)
+    except:
+        return redirect('teacherloginpage')
     
     context={'teacher':teacher}
     return render(request,'base/teacher_create_course.html',context)
@@ -356,36 +382,40 @@ def teacherUpdateCourse(request,pk,sk):
     teacher=Teacher.objects.get(name=pk)
     course=Course.objects.get(courseName=sk)
     topics=Topic.objects.filter(teacher_id=teacher.id,course_id=course.id)
-    if request.method=='POST':
-        courseName=request.POST['coursename']
-        description=request.POST['description']
-        content=request.POST['content']
-        price=request.POST['price']
-        category=request.POST['category']
-        
-        new_course=Course.objects.get(id=course.id,teacher_id=Teacher.objects.get(name=pk))
-        
-        new_course.courseName=courseName
-        new_course.teacher_id=Teacher.objects.get(name=teacher.name)
-        new_course.description=description
-        new_course.content=content
-        new_course.price=price
-        new_course.category=category
-        
-        new_course.save()
-        course=Course.objects.get(courseName=new_course.courseName)
+    try:
+        if request.session['email'] ==teacher.email:
+            if request.method=='POST':
+                courseName=request.POST['coursename']
+                description=request.POST['description']
+                content=request.POST['content']
+                price=request.POST['price']
+                category=request.POST['category']
+                
+                new_course=Course.objects.get(id=course.id,teacher_id=Teacher.objects.get(name=pk))
+                
+                new_course.courseName=courseName
+                new_course.teacher_id=Teacher.objects.get(name=teacher.name)
+                new_course.description=description
+                new_course.content=content
+                new_course.price=price
+                new_course.category=category
+                
+                new_course.save()
+                course=Course.objects.get(courseName=new_course.courseName)
+                if topics:
+                    context={'teacher':teacher,'course':course,'topics':topics}  
+                else:
+                    context={'teacher':teacher}
+                
+                return redirect('teachermycourse',teacher)
+    
+        course=Course.objects.get(courseName=sk)
         if topics:
             context={'teacher':teacher,'course':course,'topics':topics}  
         else:
-            context={'teacher':teacher}
-        
-        return redirect('teachermycourse',teacher)
-    
-    course=Course.objects.get(courseName=sk)
-    if topics:
-        context={'teacher':teacher,'course':course,'topics':topics}  
-    else:
-        context={'teacher':teacher,'course':course}
+            context={'teacher':teacher,'course':course}
+    except:
+        return redirect('teacherloginpage')
     
     return render(request,'base/teacher_edit_course.html',context)
 
@@ -394,43 +424,53 @@ def addTopic(request,sk,pk):
     course=Course.objects.get(courseName=pk)
     context={'teacher':teacher,'course':course}
     purchasedusers=PurchaseAndEnrolment.objects.filter(teacher_id=Teacher.objects.get(name=sk),course_id=Course.objects.get(courseName=pk))
-    emails=[]
-    for email in purchasedusers:
-        emails.append(email.student_id.email)
-    if request.method=='POST':
-        content=request.POST['content']
-        new_topic=Topic(teacher_id=Teacher.objects.get(name=sk),course_id=Course.objects.get(courseName=pk),content=content)
-        new_topic.save()
-        s = smtplib.SMTP('smtp.gmail.com', 587)
-        s.starttls() 
-        s.set_debuglevel(1)
-        msg = MIMEText("Added new topic in : "+course.courseName+" \n\n Content is "+new_topic.content+"\n\nAll the best")
-        sender = '20d18@sdmit.in'
-        password = 'Charan@1234'
-        recipients = emails
-        s.login(sender, password)  
-        msg['Subject'] = "Added new topic in "+course.courseName
-        msg['From'] = sender
-        msg['To'] = ", ".join(recipients)
-        s.sendmail(sender, recipients, msg.as_string())
-        
-        return redirect('teachermycourse',teacher)
+    emails=[teacher.email]
+    try:
+        if request.session['email'] ==teacher.email:
+            for email in purchasedusers:
+                emails.append(email.student_id.email)
+            if request.method=='POST':
+                content=request.POST['content']
+                new_topic=Topic(teacher_id=Teacher.objects.get(name=sk),course_id=Course.objects.get(courseName=pk),content=content)
+                new_topic.save()
+                s = smtplib.SMTP('smtp.gmail.com', 587)
+                s.starttls() 
+                s.set_debuglevel(1)
+                msg = MIMEText("Added new topic in : "+course.courseName+" \n\n Content is "+new_topic.content+"\n\nAll the best")
+                sender = '20d18@sdmit.in'
+                password = 'Charan@1234'
+                recipients = emails
+                s.login(sender, password)  
+                msg['Subject'] = "Added new topic in "+course.courseName
+                msg['From'] = sender
+                msg['To'] = ", ".join(recipients)
+                s.sendmail(sender, recipients, msg.as_string())                
+                return redirect('teachermycourse',teacher)
+    except:
+        return redirect('teacherloginpage')
     
     return render(request,'base/teacher_add_topic.html',context)
 
 def updateTopic(request,sk,pk,tk):
     teacher=Teacher.objects.get(name=sk)
     course=Course.objects.get(courseName=pk)
+    try:
+        if request.session['email'] ==teacher.email:
     
-    
-    if request.method=='POST':
-        content=request.POST['content']
-        new_topic=Topic.objects.get(id=tk)
-        new_topic.content=content
-        new_topic.save()
-        
-        return redirect('teachermycourse',teacher)
-    topic=Topic.objects.get(id=tk)
-    context={'teacher':teacher,'course':course,'topic':topic}
+            if request.method=='POST':
+                content=request.POST['content']
+                new_topic=Topic.objects.get(id=tk)
+                new_topic.content=content
+                new_topic.save()
+                
+                return redirect('teachermycourse',teacher)
+            topic=Topic.objects.get(id=tk)
+            context={'teacher':teacher,'course':course,'topic':topic}
+    except:
+        return redirect('teacherloginpage')
     return render(request,'base/teacher_update_topic.html',context)
+
+def logoutUser(request):
+    del request.session['email']
+    return redirect('home')
         
