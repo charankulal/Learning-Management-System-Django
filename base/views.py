@@ -364,7 +364,7 @@ def teacherCreateCourse(request, pk):
     teacher = Teacher.objects.get(name=pk)
     purchasedusers = PurchaseAndEnrolment.objects.filter(
         teacher_id=Teacher.objects.get(name=pk))
-    emails = []
+    emails = [teacher.email]
     try:
         if request.session['email'] == teacher.email:
             for email in purchasedusers:
